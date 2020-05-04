@@ -10,3 +10,13 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+
+.DS_Store
+laravel-echo-server.json
+laravel-echo-server.lock
+
+/public/mix-manifest.json
+/public/fonts/vendor/*
+/public/css/app.css
+/public/js/app.js
+/public/js/app.js.LICENSE.txt
