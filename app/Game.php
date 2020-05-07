@@ -39,6 +39,17 @@ class Game extends Model
         return $this->hasMany('App\GameImprovement', 'game_id');
     }
 
+    public function all_pick_occupations()
+    {
+        return $this->hasMany('App\GamePickOccupation', 'game_id');
+    }
+
+    public function all_pick_improvements()
+    {
+        return $this->hasMany('App\GamePickImprovement', 'game_id');
+    }
+
+
     public function getPileOccupations()
     {
         $this->loadMissing('all_occupations');
@@ -59,5 +70,11 @@ class Game extends Model
             ->whereNotIn('id', array_merge($game_card_ids, $ban_card_ids))
             ->where('type', CardType::MINOR_IMPROVEMENT)->get();
         return $improvements->shuffle();
+    }
+
+    public function is_picking(): bool
+    {
+        $this->loadMissing(['all_pick_occupations', 'all_pick_improvements']);
+        return $this->all_pick_occupations->count() !== 0 or $this->all_pick_improvements->count() !== 0;
     }
 }

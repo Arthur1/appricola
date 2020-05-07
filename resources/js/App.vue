@@ -22,7 +22,6 @@ export default {
         },
         isLoading() {
             let requiresAuth = typeof this.$route.meta.requiresAuth === 'undefined' || this.$route.meta.requiresAuth
-            console.log(requiresAuth, this.$store.state.isInitialized)
             return requiresAuth && ! this.$store.state.isInitialized
         }
     }

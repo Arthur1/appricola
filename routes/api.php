@@ -21,4 +21,5 @@ Route::post('/logout', 'Auth\LoginController@logout');
 Route::get('/users/me', 'UserController@getMyData');
 Route::get('/games/list', 'GameUtilController@list');
 Route::post('/games/', 'GameUtilController@create');
+Route::get('/games/{id}/states', 'GamePlayController@states');
 Route::get('/pools/list', 'PoolController@list');
