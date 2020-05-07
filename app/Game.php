@@ -22,7 +22,6 @@ class Game extends Model
     {
         return $this->hasOne('App\GamePlayer', 'game_id')
             ->where('user_id', Auth::id());
-            // ->whereHas('user', fn(Builder $query) => $query->where('id', Auth::id()));
     }
 
     public function pool()
