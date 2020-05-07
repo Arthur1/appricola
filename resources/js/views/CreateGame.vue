@@ -4,7 +4,7 @@
         <form @submit.prevent="create">
             <div class="form-group">
                 <label for="form_players_number">プレイ人数</label>
-                <select class="form-control" id="form_players_number" v-model="players_number" @change="flushUsers">
+                <select class="form-control" id="form_players_number" v-model="players_number" @change="flushUsers" required>
                     <option value="2">2人</option>
                     <option value="3">3人</option>
                     <option value="4">4人</option>
@@ -14,13 +14,13 @@
             </div>
             <div class="form-group">
                 <label for="form_pool_id">カードプール</label>
-                <select class="form-control" id="form_pool_id" v-model="pool_id">
-                    <option v-for="pool in pools" :key="pool.id">{{ pool.name }}</option>
+                <select class="form-control" id="form_pool_id" v-model="pool_id" required>
+                    <option v-for="pool in pools" :key="pool.id" :value="pool.id">{{ pool.name }}</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="form_cards_number">ドラフト初期枚数</label>
-                <select class="form-control" id="form_cards_number" v-model="cards_number">
+                <select class="form-control" id="form_cards_number" v-model="cards_number" required>
                     <option value="7">7枚</option>
                     <option value="8">8枚</option>
                     <option value="9">9枚</option>
@@ -29,7 +29,7 @@
             </div>
             <div class="form-group" v-for="n in 6" :key="n" :class="{'d-none': players_number < n}">
                 <label for="form_user_1">ユーザ名({{ n }}人目)</label>
-                <input type="text" :id="`form_user_${n}`" v-model="users[n]" class="form-control" :disabled="players_number < n">
+                <input type="text" :id="`form_user_${n}`" v-model="users[n - 1]" class="form-control" :disabled="players_number < n" required>
             </div>
             <button type="submit" class="btn btn-primary" :disabled="is_processing">作成する</button>
         </form>
@@ -66,6 +66,7 @@ export default {
                 cards_number: this.cards_number,
                 users: this.users,
             }
+            console.log(payload)
             axios.post('/api/games/', payload).then(res => {
                 this.$toast.success('ゲームを作成しました')
                 this.$router.push('/home')

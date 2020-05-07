@@ -18,4 +18,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout');
-Route::get('/user', 'UserController@getMyData');
+Route::get('/users/me', 'UserController@getMyData');
+Route::get('/games/list', 'GameUtilController@list');
+Route::post('/games/', 'GameUtilController@create');
+Route::get('/pools/list', 'PoolController@list');

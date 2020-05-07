@@ -45,6 +45,11 @@ class PoolsSeeder extends Seeder
                 'name' => 'リバイズド全拡張',
                 'owner_id' => null,
             ],
+            [
+                'id' => 7,
+                'name' => '旧版+リバイズド全拡張',
+                'owner_id' => null,
+            ],
         ]);
 
         $pool_decks_list = [
