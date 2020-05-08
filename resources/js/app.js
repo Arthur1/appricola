@@ -11,7 +11,7 @@ import router from './router'
 import App from './App.vue'
 import store from './store'
 import VueToast from 'vue-toast-notification'
-import { ModalPlugin } from 'bootstrap-vue'
+import { ModalPlugin, OverlayPlugin } from 'bootstrap-vue'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,6 +21,7 @@ import { ModalPlugin } from 'bootstrap-vue'
 
 Vue.use(VueToast)
 Vue.use(ModalPlugin)
+Vue.use(OverlayPlugin)
 
 store.dispatch('setUser').catch()
 

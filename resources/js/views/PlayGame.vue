@@ -27,7 +27,17 @@ export default {
     created() {
         axios.get(`/api/games/${this.$route.params.id}/states`).then(res => {
             this.game = res.data
+            if (this.isDraftView) {
+                this.$toast.info('ピックするカードを選択してください')
+            }
+            Echo.private(`game.${this.game.id}`).listen('GamePickedEvent', (e) => {
+                if (! this.game.my_player) return
+                if (this.isWaitDraftView && e.next_player_order == this.game.my_player.player_order) this.fetchData()
+            })
         }).catch(err => {})
+    },
+    beforeDestroy() {
+        Echo.leave(`game.${this.game.id}`)
     },
     computed: {
         isDraftView() {
@@ -35,10 +45,19 @@ export default {
             return Boolean(this.game.my_player.pick_occupations.length && this.game.my_player.pick_improvements.length)
         },
         isWaitDraftView() {
+            if (this.isDraftView) return false;
             return true;
         }
     },
     methods: {
+        fetchData() {
+            axios.get(`/api/games/${this.$route.params.id}/states`).then(res => {
+                this.game = res.data
+                if (this.isDraftView) {
+                    this.$toast.info('ピックするカードを選択してください')
+                }
+            }).catch(err => {})
+        },
         updateGame(game) {
             this.game = game
         }

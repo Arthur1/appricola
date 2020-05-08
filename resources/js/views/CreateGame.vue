@@ -13,10 +13,12 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="form_pool_id">カードプール</label>
-                <select class="form-control" id="form_pool_id" v-model="pool_id" required>
-                    <option v-for="pool in pools" :key="pool.id" :value="pool.id">{{ pool.name }}</option>
-                </select>
+                <b-overlay :show="this.pools.length <= 0" rounded="sm">
+                    <label for="form_pool_id">カードプール</label>
+                    <select class="form-control" id="form_pool_id" v-model="pool_id" required>
+                        <option v-for="pool in pools" :key="pool.id" :value="pool.id">{{ pool.name }}</option>
+                    </select>
+                </b-overlay>
             </div>
             <div class="form-group">
                 <label for="form_cards_number">ドラフト初期枚数</label>
