@@ -22,4 +22,5 @@ Route::get('/users/me', 'UserController@getMyData');
 Route::get('/games/list', 'GameUtilController@list');
 Route::post('/games/', 'GameUtilController@create');
 Route::get('/games/{id}/states', 'GamePlayController@states');
+Route::post('/games/{id}/pick', 'GamePlayController@pickCards');
 Route::get('/pools/list', 'PoolController@list');

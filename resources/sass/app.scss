@@ -49,3 +49,9 @@
 .modal-backdrop {
     opacity: $modal-backdrop-opacity;
 }
+.btn-primary {
+    color: white;
+    &:disabled {
+        color: white;
+    }
+}

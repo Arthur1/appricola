@@ -22,7 +22,7 @@ import { ModalPlugin } from 'bootstrap-vue'
 Vue.use(VueToast)
 Vue.use(ModalPlugin)
 
-store.dispatch('setUser')
+store.dispatch('setUser').catch()
 
 new Vue({
     router,

@@ -11,14 +11,14 @@ class Game extends Model
 {
     protected $table = 'games';
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    protected $with = ['players', 'pool', 'my_user'];
+    protected $with = ['players', 'pool', 'my_player'];
 
     public function players()
     {
         return $this->hasMany('App\GamePlayer', 'game_id');
     }
 
-    public function my_user()
+    public function my_player()
     {
         return $this->hasOne('App\GamePlayer', 'game_id')
             ->where('user_id', Auth::id());
@@ -57,7 +57,8 @@ class Game extends Model
         $ban_card_ids = $this->pool->ban_cards->pluck('card_id')->all();
         $occupations = Card::whereIn('deck_id', $this->pool->decks->pluck('deck_id')->all())
             ->whereNotIn('id', array_merge($game_card_ids, $ban_card_ids))
-            ->where('type', CardType::OCCUPATION)->get();
+            ->where('type', CardType::OCCUPATION)
+            ->where('category', '<=', $this->players_number)->get();
         return $occupations->shuffle();
     }
 

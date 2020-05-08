@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\CardStatus;
+use App\GameOccupation;
 
 class GamePickOccupation extends Model
 {
@@ -15,10 +17,21 @@ class GamePickOccupation extends Model
         return $this->belongsTo('App\Card', 'card_id');
     }
 
+    public function pick(Game $game)
+    {
+        GameOccupation::create([
+            'game_id' => $game->id,
+            'player_id' => $game->my_player->id,
+            'card_id' => $this->card_id,
+            'status' => CardStatus::IN_HAND,
+        ]);
+        $this->delete();
+    }
+
     public static function setCards(Game $game)
     {
-        $hand_cards_number = $game->my_user->hand_occupations->count();
-        $set_id = (($hand_cards_number + $game->my_user->player_order - 1) % $game->players_number) + 1;
+        $hand_cards_number = $game->my_player->hand_occupations->count();
+        $set_id = (($hand_cards_number + $game->my_player->player_order - 1) % $game->players_number) + 1;
         $pick_occupations = self::where('game_id', $game->id)->where('set_id', $set_id)->get();
         if ($hand_cards_number + $pick_occupations->count() !== $game->cards_number) {
             return [];
