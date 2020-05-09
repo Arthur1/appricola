@@ -30,7 +30,7 @@ class GamePickImprovement extends Model
 
     public function discard(Game $game)
     {
-        GameOccupation::create([
+        GameImprovement::create([
             'game_id' => $game->id,
             'player_id' => $game->my_player->id,
             'card_id' => $this->card_id,

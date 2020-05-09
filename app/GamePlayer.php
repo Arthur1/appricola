@@ -26,13 +26,15 @@ class GamePlayer extends Model
     public function played_occupations()
     {
         return $this->hasMany('App\GameOccupation', 'player_id')
-            ->whereIn('status', [CardStatus::PLAYED, CardStatus::TURNED_OVER]);
+            ->whereIn('status', [CardStatus::PLAYED, CardStatus::TURNED_OVER])
+            ->orderBy('updated_at');
     }
 
     public function played_improvements()
     {
         return $this->hasMany('App\GameImprovement', 'player_id')
-            ->whereIn('status', [CardStatus::PLAYED, CardStatus::TURNED_OVER]);
+            ->whereIn('status', [CardStatus::PLAYED, CardStatus::TURNED_OVER])
+            ->orderBy('updated_at');
     }
 
     public function hand_occupations()

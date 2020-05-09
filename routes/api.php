@@ -19,8 +19,21 @@ Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout');
 Route::get('/users/me', 'UserController@getMyData');
+Route::get('/pools/list', 'PoolController@list');
 Route::get('/games/list', 'GameUtilController@list');
 Route::post('/games/', 'GameUtilController@create');
+
 Route::get('/games/{id}/states', 'GamePlayController@states');
 Route::post('/games/{id}/pick', 'GamePlayController@pickCards');
-Route::get('/pools/list', 'PoolController@list');
+
+Route::put('/games/{game_id}/occupations/{occupation_id}/play', 'GamePlayController@playOccupation');
+Route::put('/games/{game_id}/improvements/{improvement_id}/play', 'GamePlayController@playImprovement');
+Route::put('/games/{game_id}/occupations/{occupation_id}/unplay', 'GamePlayController@unplayOccupation');
+Route::put('/games/{game_id}/improvements/{improvement_id}/unplay', 'GamePlayController@unplayImprovement');
+Route::put('/games/{game_id}/occupations/{occupation_id}/face_up', 'GamePlayController@faceUpOccupation');
+Route::put('/games/{game_id}/improvements/{improvement_id}/face_up', 'GamePlayController@faceUpImprovement');
+Route::put('/games/{game_id}/occupations/{occupation_id}/face_down', 'GamePlayController@faceDownOccupation');
+Route::put('/games/{game_id}/improvements/{improvement_id}/face_down', 'GamePlayController@faceDownImprovement');
+
+Route::post('/games/{game_id}/draw_occupations', 'GamePlayController@drawOccupations');
+Route::post('/games/{game_id}/draw_improvements', 'GamePlayController@drawImprovements');

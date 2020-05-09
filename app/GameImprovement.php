@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class GameImprovement extends Model
 {
+    use GameCard;
+
     protected $table = 'game_improvements';
     protected $guarded = ['id'];
     protected $with = ['card'];

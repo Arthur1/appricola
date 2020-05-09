@@ -1,8 +1,11 @@
 <template>
-    <li class="list-group-item list-group-item-action">
-        <div class="listItem-content d-flex justify-content-between align-items-center" @click="$bvModal.show(`occupationRowModal-${occupation.card.id}`)" @contextmenu.prevent.stop="handleClick($event)">
+    <li class="list-group-item list-group-item-action" :class="{'list-group-item-dark': isTurnedOver}">
+        <div v-if="! isTurnedOver" class="listItem-content d-flex justify-content-between align-items-center" @click="$bvModal.show(`occupationRowModal-${occupation.card.id}`)" @contextmenu.prevent.stop="handleClick($event)">
             {{ occupation.card.japanese_name }}
             <span class="badge badge-occupation text-white">{{ occupation.card.id_display }}</span>
+        </div>
+        <div class="listItem-content" v-else @contextmenu.prevent.stop="handleClick($event)">
+            裏返しの職業
         </div>
         <b-modal :id="`occupationRowModal-${occupation.card.id}`" hide-footer>
             <template v-slot:modal-title>
@@ -22,6 +25,11 @@
 <script>
 export default {
     props: ['occupation'],
+    computed: {
+        isTurnedOver() {
+            return ! this.occupation.status || this.occupation.status === 'turned_over'
+        }
+    },
     methods: {
         handleClick(event) {
             this.$emit('rightClick', event, this.occupation)

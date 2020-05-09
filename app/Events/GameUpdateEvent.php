@@ -17,15 +17,17 @@ class GameUpdateEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     private Game $game;
+    private string $message;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Game $game)
+    public function __construct(Game $game, string $message)
     {
         $this->game = $game;
+        $this->message = $message;
     }
 
     /**
@@ -40,6 +42,8 @@ class GameUpdateEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return [];
+        return [
+            'message' => $this->message,
+        ];
     }
 }

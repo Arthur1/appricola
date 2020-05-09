@@ -9,8 +9,11 @@ use App\Game;
 use App\GamePickOccupation;
 use App\GamePickImprovement;
 use App\Exceptions\InvalidActionException;
+use App\Exceptions\OutOfCardsException;
 use App\Events\GamePickedEvent;
 use App\Events\GameUpdateEvent;
+use App\Http\Requests\DrawCardsRequest;
+use App\Enums\CardStatus;
 
 class GamePlayController extends Controller
 {
@@ -73,9 +76,205 @@ class GamePlayController extends Controller
         if ($game->is_picking) {
             broadcast(new GamePickedEvent($game, $game->my_player));
         } else {
-            broadcast(new GameUpdateEvent($game));
+            broadcast(new GameUpdateEvent($game, 'ドラフトが終了しました'));
         }
 
         return $game->toArray();
+    }
+
+    public function playOccupation(Request $request, $game_id, $occupation_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $game->my_player->load('hand_occupations');
+        $play_occupation = $game->my_player->hand_occupations->firstWhere('id', $occupation_id);
+        if (is_null($play_occupation)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $play_occupation->play();
+
+        $message = $game->my_player->user->name . '(' . $game->my_player->player_order . ')が【'
+            . $play_occupation->card->japanese_name . '】をプレイしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function playImprovement(Request $request, $game_id, $improvement_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $game->my_player->load('hand_improvements');
+        $play_improvement = $game->my_player->hand_improvements->firstWhere('id', $improvement_id);
+        if (is_null($play_improvement)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $play_improvement->play();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $play_improvement->card->japanese_name . '】をプレイしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function unplayOccupation(Request $request, $game_id, $occupation_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $unplay_occupation = $game->my_player->played_occupations->firstWhere('id', $occupation_id);
+        if (is_null($unplay_occupation)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $unplay_occupation->unplay();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $unplay_occupation->card->japanese_name . '】を手札に戻しました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function unplayImprovement(Request $request, $game_id, $improvement_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $unplay_improvement = $game->my_player->played_improvements->firstWhere('id', $improvement_id);
+        if (is_null($unplay_improvement)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $unplay_improvement->unplay();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $unplay_improvement->card->japanese_name . '】を手札に戻しました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function faceUpOccupation(Request $request, $game_id, $occupation_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $face_up_occupation = $game->my_player->played_occupations->firstWhere('id', $occupation_id);
+        if (is_null($face_up_occupation)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $face_up_occupation->faceUp();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $face_up_occupation->card->japanese_name . '】を表にしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function faceUpImprovement(Request $request, $game_id, $improvement_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $face_up_improvement = $game->my_player->played_improvements->firstWhere('id', $improvement_id);
+        if (is_null($face_up_improvement)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $face_up_improvement->faceUp();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $face_up_improvement->card->japanese_name . '】を表にしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function faceDownOccupation(Request $request, $game_id, $occupation_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $face_down_occupation = $game->my_player->played_occupations->firstWhere('id', $occupation_id);
+        if (is_null($face_down_occupation)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $face_down_occupation->faceDown();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $face_down_occupation->card->japanese_name . '】を表にしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function faceDownImprovement(Request $request, $game_id, $improvement_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $face_down_improvement = $game->my_player->played_improvements->firstWhere('id', $improvement_id);
+        if (is_null($face_down_improvement)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $face_down_improvement->faceDown();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $face_down_improvement->card->japanese_name . '】を表にしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function drawOccupations(DrawCardsRequest $request, $game_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+
+        DB::transaction(function() use ($request, $game) {
+            $pile_occupations = $game->getPileOccupations();
+            if ($pile_occupations->count() < $request->draw_number) {
+                throw new OutOfCardsException();
+            }
+
+            for ($i = 0; $i < $request->draw_number; $i++) {
+                $draw_occupation_rows[] = [
+                    'game_id' => $game->id,
+                    'player_id' => $game->my_player->id,
+                    'card_id' => $pile_occupations->pop()->id,
+                    'status' => CardStatus::IN_HAND,
+                ];
+            }
+            DB::table('game_occupations')->insert($draw_occupation_rows);
+        });
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が職業を'
+            . $request->draw_number . '枚引きました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function drawImprovements(DrawCardsRequest $request, $game_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+
+        DB::transaction(function() use ($request, $game) {
+            $pile_improvements = $game->getPileImprovements();
+            if ($pile_improvements->count() < $request->draw_number) {
+                throw new OutOfCardsException();
+            }
+
+            for ($i = 0; $i < $request->draw_number; $i++) {
+                $draw_improvement_rows[] = [
+                    'game_id' => $game->id,
+                    'player_id' => $game->my_player->id,
+                    'card_id' => $pile_improvements->pop()->id,
+                    'status' => CardStatus::IN_HAND,
+                ];
+            }
+            DB::table('game_improvements')->insert($draw_improvement_rows);
+        });
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が小さい進歩を'
+            . $request->draw_number . '枚引きました';
+        broadcast(new GameUpdateEvent($game, $message));
     }
 }
