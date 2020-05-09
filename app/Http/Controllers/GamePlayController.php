@@ -27,7 +27,7 @@ class GamePlayController extends Controller
         $game = Game::findOrFail($id);
         $game->is_picking = $game->is_picking();
         if ($game->my_player) {
-            $game->my_player->load(['hand_occupations', 'hand_improvements']);
+            $game->my_player->load(['hand_occupations', 'hand_improvements', 'discarded_occupations', 'discarded_improvements']);
             $game->my_player->pick_occupations = GamePickOccupation::setCards($game);
             $game->my_player->pick_improvements = GamePickImprovement::setCards($game);
         }
@@ -40,7 +40,7 @@ class GamePlayController extends Controller
         if (! $game->my_player) {
             throw new InvalidActionException('あなたはプレイヤーではありません');
         }
-        $game->my_player->load(['hand_occupations', 'hand_improvements']);
+        $game->my_player->load(['hand_occupations', 'hand_improvements', 'discarded_occupations', 'discarded_improvements']);
         if ($game->my_player->hand_occupations->count() >= 7) {
             throw new InvalidActionException('無効な行動です');
         }
@@ -124,7 +124,8 @@ class GamePlayController extends Controller
         if (! $game->my_player) {
             throw new InvalidActionException('あなたはプレイヤーではありません');
         }
-        $unplay_occupation = $game->my_player->played_occupations->firstWhere('id', $occupation_id);
+        $game->my_player->load('all_occupations');
+        $unplay_occupation = $game->my_player->all_occupations->firstWhere('id', $occupation_id);
         if (is_null($unplay_occupation)) {
             throw new InvalidActionException('そのカードは存在しません');
         }
@@ -141,7 +142,8 @@ class GamePlayController extends Controller
         if (! $game->my_player) {
             throw new InvalidActionException('あなたはプレイヤーではありません');
         }
-        $unplay_improvement = $game->my_player->played_improvements->firstWhere('id', $improvement_id);
+        $game->my_player->load('all_improvements');
+        $unplay_improvement = $game->my_player->all_improvements->firstWhere('id', $improvement_id);
         if (is_null($unplay_improvement)) {
             throw new InvalidActionException('そのカードは存在しません');
         }
@@ -219,6 +221,41 @@ class GamePlayController extends Controller
             . $face_down_improvement->card->japanese_name . '】を表にしました';
         broadcast(new GameUpdateEvent($game, $message));
     }
+
+    public function discardOccupation(Request $request, $game_id, $occupation_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $game->my_player->load('all_occupations');
+        $discard_occupation = $game->my_player->all_occupations->firstWhere('id', $occupation_id);
+        if (is_null($discard_occupation)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $discard_occupation->discard();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が職業を捨て札にしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function discardImprovement(Request $request, $game_id, $improvement_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $game->my_player->load('all_improvements');
+        $discard_improvement = $game->my_player->all_improvements->firstWhere('id', $improvement_id);
+        if (is_null($discard_improvement)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+        $discard_improvement->discard();
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が小さい進歩を捨て札にしました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
 
     public function drawOccupations(DrawCardsRequest $request, $game_id)
     {

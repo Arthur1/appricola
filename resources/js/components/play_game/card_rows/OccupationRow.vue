@@ -27,7 +27,7 @@ export default {
     props: ['occupation'],
     computed: {
         isTurnedOver() {
-            return ! this.occupation.status || this.occupation.status === 'turned_over'
+            return this.occupation.status && this.occupation.status === 'turned_over'
         }
     },
     methods: {

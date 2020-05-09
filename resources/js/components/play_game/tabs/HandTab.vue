@@ -1,5 +1,5 @@
 <template>
-    <b-tab title="自分の手札">
+    <b-tab title="手札">
         <div class="row">
             <div class="col-sm-6">
                 <h3 class="text-occupation">職業</h3>
@@ -83,6 +83,10 @@ export default {
     },
     methods: {
         openMenu(event, card) {
+            Object.defineProperty(event, 'pageY', {
+                value: event.pageY - 79,
+                writable: true
+            })
             this.$refs.cardMenu.showMenu(event, card)
         },
         optionClicked(event) {
@@ -91,13 +95,23 @@ export default {
                     this.playCard(event)
                     break
                 case 'discard':
-                    console.log('discard')
+                    this.discardCard(event)
                     break
             }
         },
         playCard(event) {
             let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
+            this.$emit('setIsLoading', true)
             axios.put(`/api/games/${this.player.game_id}/${type}/${event.item.id}/play`).then().catch(err => {
+                this.$emit('setIsLoading', false)
+                this.errorsToast(err)
+            })
+        },
+        discardCard(event) {
+            let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
+            this.$emit('setIsLoading', true)
+            axios.put(`/api/games/${this.player.game_id}/${type}/${event.item.id}/discard`).then().catch(err => {
+                this.$emit('setIsLoading', false)
                 this.errorsToast(err)
             })
         },
@@ -119,7 +133,9 @@ export default {
             const payload = {
                 draw_number: this.draw_occupations_number,
             }
+            this.$emit('setIsLoading', true)
             axios.post(`/api/games/${this.player.game_id}/draw_occupations`, payload).then().catch(err => {
+                this.$emit('setIsLoading', false)
                 this.errorsToast(err)
             })
             this.$nextTick(() => {
@@ -130,7 +146,9 @@ export default {
             const payload = {
                 draw_number: this.draw_improvements_number,
             }
+            this.$emit('setIsLoading', true)
             axios.post(`/api/games/${this.player.game_id}/draw_improvements`, payload).then().catch(err => {
+                this.$emit('setIsLoading', false)
                 this.errorsToast(err)
             })
             this.$nextTick(() => {

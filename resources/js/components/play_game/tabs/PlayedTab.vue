@@ -69,6 +69,10 @@ export default {
                 class: 'text-danger',
             })
             this.options = options
+            Object.defineProperty(event, 'pageY', {
+                value: event.pageY - 79,
+                writable: true
+            })
             this.$refs.cardMenu.showMenu(event, card)
         },
         optionClicked(event) {
@@ -83,25 +87,39 @@ export default {
                     this.faceDownCard(event)
                     break
                 case 'discard':
-                    console.log('discard')
+                    this.discardCard(event)
                     break
             }
         },
         unplayCard(event) {
             let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
+            this.$emit('setIsLoading', true)
             axios.put(`/api/games/${this.player.game_id}/${type}/${event.item.id}/unplay`).then().catch(err => {
+                this.$emit('setIsLoading', false)
                 this.errorsToast(err)
             })
         },
         faceUpCard(event) {
             let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
+            this.$emit('setIsLoading', true)
             axios.put(`/api/games/${this.player.game_id}/${type}/${event.item.id}/face_up`).then().catch(err => {
+                this.$emit('setIsLoading', false)
                 this.errorsToast(err)
             })
         },
         faceDownCard(event) {
             let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
+            this.$emit('setIsLoading', true)
             axios.put(`/api/games/${this.player.game_id}/${type}/${event.item.id}/face_down`).then().catch(err => {
+                this.$emit('setIsLoading', false)
+                this.errorsToast(err)
+            })
+        },
+        discardCard(event) {
+            let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
+            this.$emit('setIsLoading', true)
+            axios.put(`/api/games/${this.player.game_id}/${type}/${event.item.id}/discard`).then().catch(err => {
+                this.$emit('setIsLoading', false)
                 this.errorsToast(err)
             })
         },

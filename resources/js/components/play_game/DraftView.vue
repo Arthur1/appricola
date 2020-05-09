@@ -85,10 +85,12 @@ export default {
                 picked_occupation: this.picked_occupation,
                 picked_improvement: this.picked_improvement,
             }
+            this.$emit('setIsLoading', true)
             axios.post(`/api/games/${this.game.id}/pick`, payload).then(res => {
                 this.is_processing = false
                 this.$emit('updateGame', res.data)
             }).catch(err => {
+                this.$emit('setIsLoading', false)
                 this.is_processing = false
                 console.log(err)
             })

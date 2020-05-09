@@ -37,6 +37,18 @@ class GamePlayer extends Model
             ->orderBy('updated_at');
     }
 
+    public function discarded_occupations()
+    {
+        return $this->hasMany('App\GameOccupation', 'player_id')
+            ->where('status', CardStatus::DISCARDED);
+    }
+
+    public function discarded_improvements()
+    {
+        return $this->hasMany('App\GameImprovement', 'player_id')
+            ->where('status', CardStatus::DISCARDED);
+    }
+
     public function hand_occupations()
     {
         return $this->hasMany('App\GameOccupation', 'player_id')
@@ -47,6 +59,16 @@ class GamePlayer extends Model
     {
         return $this->hasMany('App\GameImprovement', 'player_id')
             ->where('status', CardStatus::IN_HAND);
+    }
+
+    public function all_occupations()
+    {
+        return $this->hasMany('App\GameOccupation', 'player_id');
+    }
+
+    public function all_improvements()
+    {
+        return $this->hasMany('App\GameImprovement', 'player_id');
     }
 
     public static function getMyList()

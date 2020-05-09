@@ -30,6 +30,8 @@ Route::put('/games/{game_id}/occupations/{occupation_id}/play', 'GamePlayControl
 Route::put('/games/{game_id}/improvements/{improvement_id}/play', 'GamePlayController@playImprovement');
 Route::put('/games/{game_id}/occupations/{occupation_id}/unplay', 'GamePlayController@unplayOccupation');
 Route::put('/games/{game_id}/improvements/{improvement_id}/unplay', 'GamePlayController@unplayImprovement');
+Route::put('/games/{game_id}/occupations/{occupation_id}/discard', 'GamePlayController@discardOccupation');
+Route::put('/games/{game_id}/improvements/{improvement_id}/discard', 'GamePlayController@discardImprovement');
 Route::put('/games/{game_id}/occupations/{occupation_id}/face_up', 'GamePlayController@faceUpOccupation');
 Route::put('/games/{game_id}/improvements/{improvement_id}/face_up', 'GamePlayController@faceUpImprovement');
 Route::put('/games/{game_id}/occupations/{occupation_id}/face_down', 'GamePlayController@faceDownOccupation');
