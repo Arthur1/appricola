@@ -63,7 +63,7 @@ const routes = [
         component: PlayGame,
         meta: {
             title: 'ゲームプレイ',
-            needsAuth: true
+            requiresAuth: true
         }
     },
     {

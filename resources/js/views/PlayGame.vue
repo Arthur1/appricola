@@ -37,7 +37,6 @@ export default {
             Echo.private(`game.${this.game.id}`).listen('GamePickedEvent', e => {
                 if (! this.game.my_player) return
                 if (this.isWaitDraftView && e.next_player_order == this.game.my_player.player_order) {
-                    this.isLoading = true
                     this.fetchData().then(() => {
                         this.$toast.info('ピックするカードを選択してください')
                     }).catch()
@@ -47,7 +46,7 @@ export default {
                     this.$toast.info(e.message)
                 }).catch()
             })
-        }).catch()
+        }).catch(err => {})
     },
     beforeDestroy() {
         Echo.leave(`game.${this.game.id}`)
