@@ -36,6 +36,8 @@ Route::put('/games/{game_id}/occupations/{occupation_id}/face_up', 'GamePlayCont
 Route::put('/games/{game_id}/improvements/{improvement_id}/face_up', 'GamePlayController@faceUpImprovement');
 Route::put('/games/{game_id}/occupations/{occupation_id}/face_down', 'GamePlayController@faceDownOccupation');
 Route::put('/games/{game_id}/improvements/{improvement_id}/face_down', 'GamePlayController@faceDownImprovement');
+Route::post('/games/{game_id}/occupations/{occupation_id}/pass_left', 'GamePlayController@passOccupationLeft');
+Route::post('/games/{game_id}/improvements/{improvement_id}/pass_left', 'GamePlayController@passImprovementLeft');
 
 Route::post('/games/{game_id}/draw_occupations', 'GamePlayController@drawOccupations');
 Route::post('/games/{game_id}/draw_improvements', 'GamePlayController@drawImprovements');

@@ -256,6 +256,45 @@ class GamePlayController extends Controller
         broadcast(new GameUpdateEvent($game, $message));
     }
 
+    public function passOccupationLeft(Request $request, $game_id, $occupation_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $pass_occupation = $game->my_player->played_occupations->firstWhere('id', $occupation_id);
+        if (is_null($pass_occupation)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+
+        $next_player_order = $game->my_player->player_order % $game->players_number + 1;
+        $next_player = $game->players->firstWhere('player_order', $next_player_order);
+        $pass_occupation->pass($next_player->id);
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $pass_occupation->card->japanese_name .'】を左隣のプレイヤーに渡しました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
+
+    public function passImprovementLeft(Request $request, $game_id, $improvement_id)
+    {
+        $game = Game::findOrFail($game_id);
+        if (! $game->my_player) {
+            throw new InvalidActionException('あなたはプレイヤーではありません');
+        }
+        $pass_improvement = $game->my_player->played_improvements->firstWhere('id', $improvement_id);
+        if (is_null($pass_improvement)) {
+            throw new InvalidActionException('そのカードは存在しません');
+        }
+
+        $next_player_order = $game->my_player->player_order % $game->players_number + 1;
+        $next_player = $game->players->firstWhere('player_order', $next_player_order);
+        $pass_improvement->pass($next_player->id);
+
+        $message = '[' . $game->my_player->player_order . '] ' .$game->my_player->user->name . 'が【'
+            . $pass_improvement->card->japanese_name .'】を左隣のプレイヤーに渡しました';
+        broadcast(new GameUpdateEvent($game, $message));
+    }
 
     public function drawOccupations(DrawCardsRequest $request, $game_id)
     {

@@ -64,6 +64,10 @@ export default {
                 slug: 'unplay',
             })
             options.push({
+                name: '左隣に渡す',
+                slug: 'pass_left',
+            })
+            options.push({
                 name: '捨て札にする',
                 slug: 'discard',
                 class: 'text-danger',
@@ -85,6 +89,9 @@ export default {
                     break
                 case 'face_down':
                     this.faceDownCard(event)
+                    break
+                case 'pass_left':
+                    this.passLeft(event)
                     break
                 case 'discard':
                     this.discardCard(event)
@@ -119,6 +126,14 @@ export default {
             let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
             this.$emit('setIsLoading', true)
             axios.put(`/api/games/${this.player.game_id}/${type}/${event.item.id}/discard`).then().catch(err => {
+                this.$emit('setIsLoading', false)
+                this.errorsToast(err)
+            })
+        },
+        passLeft(event) {
+            let type = event.item.card.type === 'occupation' ? 'occupations' : 'improvements'
+            this.$emit('setIsLoading', true)
+            axios.post(`/api/games/${this.player.game_id}/${type}/${event.item.id}/pass_left`).then().catch(err => {
                 this.$emit('setIsLoading', false)
                 this.errorsToast(err)
             })
