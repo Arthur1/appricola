@@ -28,9 +28,23 @@ class GamePickImprovement extends Model
         $this->delete();
     }
 
+    public function discard(Game $game)
+    {
+        GameOccupation::create([
+            'game_id' => $game->id,
+            'player_id' => $game->my_player->id,
+            'card_id' => $this->card_id,
+            'status' => CardStatus::DISCARDED,
+        ]);
+        $this->delete();
+    }
+
     public static function setCards(Game $game)
     {
         $hand_cards_number = $game->my_player->hand_improvements->count();
+        if ($hand_cards_number === 7) {
+            return [];
+        }
         $set_id = (($hand_cards_number + $game->my_player->player_order - 1) % $game->players_number) + 1;
         $pick_improvements = self::where('game_id', $game->id)->where('set_id', $set_id)->get();
         if ($hand_cards_number + $pick_improvements->count() !== $game->cards_number) {

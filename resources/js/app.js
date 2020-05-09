@@ -11,7 +11,8 @@ import router from './router'
 import App from './App.vue'
 import store from './store'
 import VueToast from 'vue-toast-notification'
-import { ModalPlugin, OverlayPlugin } from 'bootstrap-vue'
+import { ModalPlugin, OverlayPlugin, TabsPlugin } from 'bootstrap-vue'
+import VueSimpleContextMenu from 'vue-simple-context-menu'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -22,6 +23,8 @@ import { ModalPlugin, OverlayPlugin } from 'bootstrap-vue'
 Vue.use(VueToast)
 Vue.use(ModalPlugin)
 Vue.use(OverlayPlugin)
+Vue.use(TabsPlugin)
+Vue.component('vue-simple-context-menu', VueSimpleContextMenu)
 
 store.dispatch('setUser').catch()
 

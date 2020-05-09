@@ -45,6 +45,7 @@
 @import "~bootstrap/scss/print";
 
 @import '~vue-toast-notification/dist/theme-sugar.css';
+@import '~vue-simple-context-menu/dist/vue-simple-context-menu.css';
 
 .modal-backdrop {
     opacity: $modal-backdrop-opacity;
@@ -54,4 +55,7 @@
     &:disabled {
         color: white;
     }
+}
+.vue-simple-context-menu {
+    position: fixed !important;
 }

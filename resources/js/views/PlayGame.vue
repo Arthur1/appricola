@@ -7,17 +7,23 @@
                 </div>
             </div>
         </div>
+        <play-view v-else-if="isPlayView" :game="game" />
+        <guest-view v-else-if="isGuestView" />
         <draft-view v-else-if="isDraftView" :game="game" @updateGame="updateGame" />
         <wait-draft-view v-else-if="isWaitDraftView" :game="game" />
     </div>
 </template>
 <script>
+import PlayView from '../components/play_game/PlayView.vue'
+import GuestView from '../components/play_game/GuestView.vue'
 import DraftView from '../components/play_game/DraftView.vue'
 import WaitDraftView from '../components/play_game/WaitDraftView.vue'
 export default {
     components: {
         DraftView,
         WaitDraftView,
+        GuestView,
+        PlayView,
     },
     data() {
         return {
@@ -40,13 +46,20 @@ export default {
         Echo.leave(`game.${this.game.id}`)
     },
     computed: {
+        isPlayView() {
+            return ! this.game.is_picking
+        },
+        isGuestView() {
+            if (this.gameView) return false
+            return ! this.game.my_player
+        },
         isDraftView() {
-            if (! this.game.my_player) return false;
+            if (this.isGuestView) return false
             return Boolean(this.game.my_player.pick_occupations.length && this.game.my_player.pick_improvements.length)
         },
         isWaitDraftView() {
-            if (this.isDraftView) return false;
-            return true;
+            if (this.isDraftView) return false
+            return true
         }
     },
     methods: {

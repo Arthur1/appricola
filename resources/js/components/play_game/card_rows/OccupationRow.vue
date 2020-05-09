@@ -1,7 +1,9 @@
 <template>
-    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" @click="$bvModal.show(`occupationRowModal-${occupation.card.id}`)">
-        {{ occupation.card.japanese_name }}
-        <span class="badge badge-occupation text-white">{{ occupation.card.id_display }}</span>
+    <li class="list-group-item list-group-item-action">
+        <div class="listItem-content d-flex justify-content-between align-items-center" @click="$bvModal.show(`occupationRowModal-${occupation.card.id}`)" @contextmenu.prevent.stop="handleClick($event)">
+            {{ occupation.card.japanese_name }}
+            <span class="badge badge-occupation text-white">{{ occupation.card.id_display }}</span>
+        </div>
         <b-modal :id="`occupationRowModal-${occupation.card.id}`" hide-footer>
             <template v-slot:modal-title>
                 {{ occupation.card.japanese_name }} <span class="badge badge-modal badge-occupation text-white">{{ occupation.card.id_display }}</span>
@@ -20,11 +22,19 @@
 <script>
 export default {
     props: ['occupation'],
+    methods: {
+        handleClick(event) {
+            this.$emit('rightClick', event, this.occupation)
+        },
+    }
 }
 </script>
 <style scoped>
-.list-group-item-action {
+.listItem-content {
     cursor: pointer;
+    margin: -0.75rem -1.25rem;
+    padding: 0.75rem 1.25rem;
+    user-select: none;
 }
 .badge {
     width: 3.5rem;
