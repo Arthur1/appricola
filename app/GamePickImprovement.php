@@ -45,7 +45,8 @@ class GamePickImprovement extends Model
         if ($hand_cards_number === 7) {
             return [];
         }
-        $set_id = ($game->my_player->player_order - $hand_cards_number) % $game->players_number + 1;
+        $set_id = (($game->my_player->player_order - $hand_cards_number - 1) % $game->players_number) + 1;
+        if ($set_id <= 0) $set_id += $game->players_number;
         $pick_improvements = self::where('game_id', $game->id)->where('set_id', $set_id)->get();
         if ($hand_cards_number + $pick_improvements->count() !== $game->cards_number) {
             return [];

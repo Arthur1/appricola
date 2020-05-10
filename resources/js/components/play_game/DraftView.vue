@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1 class="text-primary mt-4">ドラフト{{ pickOrder }}手目</h1>
+        <h1 class="text-primary mt-4">ドラフト{{ pickOrder }}手目 [{{ game.my_player.set_id }}]</h1>
         <div class="row">
             <div class="col-sm-6">
                 <h3 class="text-occupation mt-3">職業</h3>

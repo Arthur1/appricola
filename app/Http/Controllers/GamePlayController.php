@@ -30,6 +30,11 @@ class GamePlayController extends Controller
             $game->my_player->load(['hand_occupations', 'hand_improvements', 'discarded_occupations', 'discarded_improvements']);
             $game->my_player->pick_occupations = GamePickOccupation::setCards($game);
             $game->my_player->pick_improvements = GamePickImprovement::setCards($game);
+            if ($game->is_picking) {
+                $set_id = (($game->my_player->player_order - $game->my_player->hand_occupations->count() - 1) % $game->players_number) + 1;
+                if ($set_id <= 0) $set_id += $game->players_number;
+                $game->my_player->set_id = $set_id;
+            }
         }
         return $game->toArray();
     }
@@ -72,6 +77,11 @@ class GamePlayController extends Controller
         $game->is_picking = $game->is_picking();
         $game->my_player->pick_occupations = GamePickOccupation::setCards($game);
         $game->my_player->pick_improvements = GamePickImprovement::setCards($game);
+        if ($game->is_picking) {
+            $set_id = (($game->my_player->player_order - $game->my_player->hand_occupations->count() - 1) % $game->players_number) + 1;
+            if ($set_id <= 0) $set_id += $game->players_number;
+            $game->my_player->set_id = $set_id;
+        }
 
         if ($game->is_picking) {
             broadcast(new GamePickedEvent($game, $game->my_player));
