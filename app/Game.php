@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
+use DateTimeInterface;
 use App\Card;
 use App\Enums\CardType;
 
@@ -77,5 +78,10 @@ class Game extends Model
     {
         $this->loadMissing(['all_pick_occupations', 'all_pick_improvements']);
         return $this->all_pick_occupations->count() !== 0 or $this->all_pick_improvements->count() !== 0;
+    }
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }
