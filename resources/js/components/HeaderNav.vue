@@ -42,7 +42,7 @@ export default {
                         this.$toast.warning('ログアウトしました')
                         this.$router.push('/login')
                     })
-                }).catch(this.formErrorsToast)
+                }).catch(this.errorsToast)
             }).catch(this.csrfErrorToast)
         }
     }

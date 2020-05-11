@@ -39,7 +39,7 @@ export default {
                         this.$toast.success('ログインしました')
                         this.$router.push(this.$route.query.redirect || '/home')
                     })
-                }).catch(this.formErrorsToast)
+                }).catch(this.errorsToast)
             }).catch(this.csrfErrorToast)
         }
     }

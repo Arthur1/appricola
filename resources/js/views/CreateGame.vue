@@ -68,13 +68,12 @@ export default {
                 cards_number: this.cards_number,
                 users: this.users,
             }
-            console.log(payload)
             axios.post('/api/games/', payload).then(res => {
                 this.$toast.success('ゲームを作成しました')
                 this.$router.push('/home')
             }).catch((err) => {
                 this.is_processing = false
-                this.formErrorsToast(err)
+                this.errorsToast(err)
             })
         },
         flushUsers() {

@@ -47,7 +47,7 @@ export default {
                         this.$toast.success('ユーザ登録しました')
                         this.$router.push('/home')
                     })
-                }).catch(this.formErrorsToast)
+                }).catch(this.errorsToast)
             }).catch(this.csrfErrorToast)
         }
     }
