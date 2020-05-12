@@ -8,10 +8,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item" v-if="$store.getters.isLoggedIn">
-                        <router-link to="/home" class="nav-link">ゲーム一覧</router-link>
+                        <router-link to="/home" class="nav-link" :class="{active: $route.name === 'home'}">ゲーム一覧</router-link>
                     </li>
-                    <li class="nav-item" v-if="$store.getters.isLoggedIn">
+                    <li class="nav-item" v-if="$store.getters.isLoggedIn" :class="{active: $route.name === 'create_game'}">
                         <router-link to="/create_game" class="nav-link">ゲーム作成</router-link>
+                    </li>
+                    <li class="nav-item" v-if="$store.getters.isLoggedIn" :class="{active: $route.name === 'release'}">
+                        <router-link to="/release" class="nav-link">リリースノート</router-link>
                     </li>
                 </ul>
 

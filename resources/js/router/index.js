@@ -7,6 +7,7 @@ import Register from '../views/Register.vue'
 import Home from '../views/Home.vue'
 import CreateGame from '../views/CreateGame.vue'
 import PlayGame from '../views/PlayGame.vue'
+import Release from '../views/Release.vue'
 import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
@@ -64,6 +65,15 @@ const routes = [
         meta: {
             title: 'ゲームプレイ',
             requiresAuth: true
+        }
+    },
+    {
+        path: '/release',
+        name: 'release',
+        component: Release,
+        meta: {
+            title: 'リリースノート',
+            requiresAuth: false,
         }
     },
     {
