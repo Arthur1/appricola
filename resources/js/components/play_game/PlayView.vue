@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <game-info :game="game" />
         <h1 class="text-primary mt-4">カード一覧</h1>
         <p>カードの各種操作は右クリックのメニューから行えます。</p>
         <b-tabs content-class="mt-3">
@@ -13,7 +14,9 @@
 import PlayedTab from './tabs/PlayedTab.vue'
 import HandTab from './tabs/HandTab.vue'
 import DiscardedTab from './tabs/DiscardedTab.vue'
+import PlayGameMixin from '../../mixins/play_game'
 export default {
+    mixins: [PlayGameMixin],
     components: {
         PlayedTab,
         HandTab,

@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-overlay :show="isLoading" rounded="sm">
-            <div class="container" style="height: 100vh;" v-if="! this.game.id"></div>
+            <div class="container" style="height: 100vh;" v-if="! game.id"></div>
             <play-view v-else-if="isPlayView" :game="game" @setIsLoading="setIsLoading" />
             <guest-view v-else-if="isGuestView" />
             <draft-view v-else-if="isDraftView" :game="game" @updateGame="updateGame" @setIsLoading="setIsLoading" />

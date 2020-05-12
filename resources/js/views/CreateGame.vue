@@ -30,7 +30,7 @@
                 </select>
             </div>
             <div class="form-group" v-for="n in 6" :key="n" :class="{'d-none': players_number < n}">
-                <label for="form_user_1">ユーザ名({{ n }}人目)</label>
+                <label :for="`form_user_${n}`">ユーザ名({{ n }}人目)</label>
                 <input type="text" :id="`form_user_${n}`" v-model="users[n - 1]" class="form-control" :disabled="players_number < n" required>
             </div>
             <button type="submit" class="btn btn-primary" :disabled="is_processing">作成する</button>

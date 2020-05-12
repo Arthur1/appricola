@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <game-info :game="game" />
         <h1 class="text-primary mt-4">ドラフト待機中 [{{ game.my_player.set_id }}]</h1>
         <h2 class="text-secondary mt-3">現在の手札</h2>
         <div class="row">
