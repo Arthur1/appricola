@@ -20,12 +20,12 @@
 	    <meta property="og:site_name" content="AgriCompanion">
 	    <meta property="og:description" content="アグリコラをオンラインで遊ぶための手札管理ツールです">
 		<meta property="twitter:card" content="summary">
-	    <!-- <meta property="og:image" content="{{ url('/') }}/apple-touch-icon-180x180.png">-->
+	    <meta property="og:image" content="{{ url('/') }}/apple-touch-icon-180x180.png">
         <title>AgriCompanion</title>
         <script src="{{ mix('js/app.js') }}" defer></script>
         <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-        <!--<link rel="apple-touch-icon" type="image/png" href="/apple-touch-icon-180x180.png">
-        <link rel="icon" type="image/png" href="/icon-192x192.png">-->
+        <link rel="apple-touch-icon" type="image/png" href="/apple-touch-icon-180x180.png">
+        <link rel="icon" type="image/png" href="/icon-192x192.png">
     </head>
     <body>
         <noscript>JavaScriptを有効にしてご利用ください。</noscript>
